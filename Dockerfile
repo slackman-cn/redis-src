@@ -14,7 +14,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
     PATH="/usr/local/go/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin"
 
 # init system
-ADD sources.list /etc/apt/sources.list
+# ADD sources.list /etc/apt/sources.list
 RUN apt-get update && apt-get install -y --no-install-recommends tzdata language-pack-en \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime  \
     && echo $TZ > /etc/timezone \
