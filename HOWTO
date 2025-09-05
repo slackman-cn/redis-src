@@ -1,0 +1,81 @@
+## Redis官网
+
+https://github.com/redis/redis?tab=readme-ov-file#build-and-run-redis-with-all-data-structures---ubuntu-2204-jammy--2404-noble
+```
+sudo apt install pkg-config
+sudo apt-get install -y --no-install-recommends ca-certificates wget dpkg-dev gcc g++ libc6-dev libssl-dev make git cmake python3 python3-pip python3-venv python3-dev unzip rsync clang automake autoconf libtool
+
+export BUILD_TLS=yes BUILD_WITH_MODULES=yes INSTALL_RUST_TOOLCHAIN=yes DISABLE_WERRORS=yes
+make -j "$(nproc)" all
+make test
+make install
+```
+
+
+## 应该是依赖 gcc, libssh
+
+https://www.cnblogs.com/miracle-luna/p/14186346.html
+```
+$ apt install build-essential libssl-dev
+$ apt install pkg-config tcl
+$ make -j4 all
+$ make install PREFIX=/usr/local/redis-7.2.10
+```
+
+## build.sh
+```
+cd ~
+tar -xf /build/redis-7.2.10.tar.gz
+cd redis-7.2.10
+
+mkdir doc
+tar -xf /build/redis-doc-8663f15.tar.gz -C doc --strip-components=1
+
+patch -p1 < /build/0001-1st-man-pageis-for-redis-cli-redis-benchmark-redis-c.patch
+
+# Configuration file changes
+sed -i -e 's|^logfile .*$|logfile /var/log/redis/redis.log|g' redis.conf
+sed -i -e 's|^logfile .*$|logfile /var/log/redis/sentinel.log|g' sentinel.conf
+sed -i -e 's|^dir .*$|dir /var/lib/redis|g' redis.conf
+
+export BUILD_TLS=yes
+make -j4 all
+make install PREFIX=/usr/local/redis-7.2.10
+
+mkdir /usr/local/redis-7.2.10/conf
+cp redis.conf /usr/local/redis-7.2.10/conf
+cp sentinel.conf /usr/local/redis-7.2.10/conf
+
+
+/usr/lib/systemd/system/redis.service
+/usr/lib/systemd/system/redis-sentinel.service
+/usr/lib/systemd/system/redis.service.d/limit.conf
+/usr/lib/systemd/system/redis-sentinel.service.d/limit.conf
+
+adduser --system --group --no-create-home redis
+
+sudo usermod -d /var/lib/redis -s /bin/false redis
+chown redis:redis /var/lib/redis
+
+sudo useradd -r -s /bin/false redis
+```
+
+
+## Debian/12 好像移除了Redis
+
+```
+Bitnami 下载
+https://downloads.bitnami.com/files/stacksmith/redis-8.2.1-0-linux-amd64-debian-12.tar.gz
+https://developer.aliyun.com/article/1381254
+https://github.com/bitnami/containers/blob/main/bitnami/redis/8.2/debian-12/Dockerfile
+
+Redis 第三方下载
+https://pkgs.org/download/redis-server
+https://pkgs.org/download/redis
+https://ubuntu.pkgs.org/22.04/ubuntu-universe-amd64/redis_6.0.16-1ubuntu1_all.deb.html
+https://git.launchpad.net/ubuntu/+source/redis/tree/debian/rules?h=debian/bookworm
+
+编译
+https://github.com/ninehills/bitnami-redis-arm64-docker-build/blob/main/components/redis-sentinel/6.2.4/Dockerfile.build
+https://www.devoriales.com/post/406/building-custom-bitnami-images-a-guide-for-self-hosted-container-images
+```
