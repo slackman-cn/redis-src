@@ -89,9 +89,9 @@ https://www.devoriales.com/post/406/building-custom-bitnami-images-a-guide-for-s
 ```
 https://shuyeidc.com/wp/291266.html
 https://www.cnblogs.com/tchua/p/12394473.html
-requirepass ttknoa_cnki.net8868
+requirepass ttkn8868
 
-> ./redis-cli -h 10.1.180.1 -a ttknoa_cnki.net8868
+> ./redis-cli -h 10.1.180.1 -a ttkn8868
 ```
 
 使用root运行
