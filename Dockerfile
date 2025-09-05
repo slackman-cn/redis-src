@@ -1,4 +1,4 @@
-FROM ubuntu:jammy
+FROM ubuntu:22.04
 LABEL \
     org.opencontainers.image.title="Redis 7.2.10" \
     org.opencontainers.image.vendor="Ubuntu22 build system" \
